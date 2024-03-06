@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
-from sqlalchemy import select, desc
+from sqlalchemy import select, desc, delete
 
-from database.models import Query
+from database.models import Query, Mailing
 from config import DATABASE_URL
 
 
@@ -29,6 +29,21 @@ class Database:
             queries = result.scalars().all()
 
             return queries[::-1]
+
+    @staticmethod
+    async def add_mailing(user_id: int):
+        async with async_session() as session:
+            mailing_instance = Mailing(user_id=user_id)
+            session.add(mailing_instance)
+            await session.commit()
+
+    @staticmethod
+    async def delete_mailing(user_id: int):
+        async with async_session() as session:
+            await session.execute(
+                delete(Mailing).where(Mailing.user_id == user_id)
+            )
+            await session.commit()
 
 
 database = Database()
