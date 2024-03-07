@@ -52,15 +52,17 @@ class Response:
 
     @staticmethod
     async def get_queries_msg(user_id: int) -> str:
-        msg = 'Последние 5 запросов\n\n'
-
         queries = await database.get_queries(user_id)
+
         if queries:
+            msg = 'Последние 5 запросов\n\n'
             for query in queries:
                 date, time = query.date.strftime('%d.%m.%Y %H:%M:%S').split()
                 msg += f'[id:{query.id}] | артикул: {query.product_id}\n' \
                        f'📆{date} ⏱{time}\n' \
                        f'=======================\n'
+        else:
+            msg = 'Список запросов пуст'
 
         return msg
 
