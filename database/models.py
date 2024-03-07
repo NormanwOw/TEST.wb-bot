@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import BigInteger, TIMESTAMP
+from sqlalchemy import BigInteger, TIMESTAMP, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -24,6 +24,5 @@ class Mailing(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
-    date: Mapped[datetime] = mapped_column(
-        TIMESTAMP, nullable=False, default=datetime.utcnow
-    )
+    product_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    message: Mapped[str] = mapped_column(Text, nullable=False)

@@ -10,16 +10,15 @@ class WBService:
         return f'https://card.wb.ru/cards/v1/detail?appType=1&curr=' \
                f'rub&dest=-1257786&spp=30&nm={product_id}'
 
-    async def __get_product(self, user_id: int, product_id: int) -> dict:
+    async def __get_product(self, product_id: int) -> dict:
         async with aiohttp.ClientSession() as session:
             url = self.__get_product_url(product_id)
             async with session.get(url) as resp:
                 response = await resp.json()
-                await database.set_query(user_id, product_id)
                 return response
 
-    async def get_product_msg(self, user_id: int, product_id: int) -> str:
-        data = await self.__get_product(user_id, product_id)
+    async def get_product_msg(self, product_id: int) -> str:
+        data = await self.__get_product(product_id)
 
         products = data['data']['products']
         msg = ''
@@ -27,9 +26,9 @@ class WBService:
             product_name = product.get('name')
             rating = product.get('reviewRating')
 
-            msg += f'Название: {product_name}\n' \
-                   f'Артикул: {product_id}\n' \
-                   f'Рейтинг: {rating}\n' \
+            msg += f'🛍 {product_name}\n' \
+                   f'🆔: {product_id}\n' \
+                   f'⭐️{rating}\n' \
 
             for size in product['sizes']:
                 size_name = size.get('name')
@@ -37,10 +36,10 @@ class WBService:
                     msg += f'======================\n'
                     price = size.get('salePriceU') / 100
                     msg += f'Размер: {size_name}\n' \
-                           f'Цена: {price}0₽\n'
+                           f'Цена: 💶 {price}0₽\n'
                 else:
                     price = product.get('salePriceU') / 100
-                    msg += f'Цена: {price}0₽\n'
+                    msg += f'Цена: 💶 {price}0₽\n'
 
                 qty = 0
                 for wh in size['stocks']:

@@ -1,0 +1,70 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:16
+    container_name: db_app
+    command: -p 5433
+    expose:
+      - 5433
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+  redis:
+    image: redis:7
+    container_name: redis_app
+    command: --port 6380
+    expose:
+      - 6380
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      bash -c 
+        "
+          alembic revision --autogenerate
+          alembic upgrade head 
+          python main.py
+        "
+    env_file:
+      - .env-non-dev
+    depends_on:
+      - db
+      - redis
+  celery:
+    build:
+      context: .
+    env_file:
+      - .env-non-dev
+    container_name: celery_app
+    command: bash -c "celery -A tasks.tasks.app worker -l info"
+    depends_on:
+      - app
+      - redis
+  celery-beat:
+    build:
+      context: .
+    env_file:
+      - .env-non-dev
+    container_name: celery_beat
+    command: bash -c "celery -A tasks.tasks.app beat"
+    depends_on:
+      - app
+      - redis
+  flower:
+    build:
+      context: .
+    env_file:
+      - .env-non-dev
+    container_name: flower_app
+    command: bash -c "celery -A tasks.tasks.app flower"
+    depends_on:
+      - celery
+      - celery-beat
+    ports:
+      - 8888:5555
+
+
+
+
