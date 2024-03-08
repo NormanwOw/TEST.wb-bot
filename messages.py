@@ -12,3 +12,5 @@ START_MSG = '✅ <b>Вас приветствует телеграм бот дл
 START_MAILING_MSG = 'Подписка оформлена'
 STOP_MAILING_MSG = 'Уведомления остановлены'
 MAILING_EXISTS_MSG = 'Вы уже подписаны'
+EMPTY_MAILING_MSG = 'Список уведомлений пуст'
+EMPTY_QUERIES_MSG = 'Список запросов пуст'

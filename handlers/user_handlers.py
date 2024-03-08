@@ -92,7 +92,7 @@ async def stop_mailing(message: types.Message):
     await message.delete()
     mailings = await database.get_mailings(message.from_user.id)
     if not mailings:
-        return message.answer('Список рассылок пуст')
+        return message.answer(messages.EMPTY_MAILING_MSG)
     mailing = mailings[0]
     await message.answer(
         text=mailing.message,

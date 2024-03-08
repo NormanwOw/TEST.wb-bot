@@ -1,6 +1,7 @@
 import aiohttp
 
 from database.orm import database
+import messages
 
 
 class WBService:
@@ -62,7 +63,7 @@ class Response:
                        f'📆{date} ⏱{time}\n' \
                        f'=======================\n'
         else:
-            msg = 'Список запросов пуст'
+            msg = messages.EMPTY_QUERIES_MSG
 
         return msg
 
