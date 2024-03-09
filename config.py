@@ -1,5 +1,4 @@
 from aiogram import Bot, Dispatcher
-from aiogram.fsm.storage.redis import RedisStorage
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -26,7 +25,6 @@ DATABASE_URL = f'postgresql+asyncpg://{settings.DB_USER}:' \
 
 REDIS_URL = f'redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}/0'
 
-bot = Bot(settings.TOKEN)
+bot = Bot(settings.TOKEN, parse_mode='HTML')
 dp = Dispatcher()
-storage = RedisStorage.from_url(url=REDIS_URL)
 

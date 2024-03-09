@@ -21,11 +21,11 @@ def get_cancel_kb() -> InlineKeyboardMarkup:
     return keyboard
 
 
-def get_pagination_kb(mailing_id: int, count: int, page: int = 1) -> InlineKeyboardMarkup:
+def get_pagination_kb(mailing_id: int, count: int, page: int = 0) -> InlineKeyboardMarkup:
     buttons = [
         [
-            InlineKeyboardButton(text='◀', callback_data=f'prev_{page-1}'),
-            InlineKeyboardButton(text='▶', callback_data=f'next_{page+1}'),
+            InlineKeyboardButton(text='◀', callback_data=f'prev_{page}'),
+            InlineKeyboardButton(text='▶', callback_data=f'next_{page}'),
         ],
         [
             InlineKeyboardButton(text='Остановить', callback_data=f'stop_{mailing_id}')

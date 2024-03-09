@@ -1,9 +1,12 @@
 import asyncio
 
 from celery import Celery
+
 from config import REDIS_URL, bot
 from database.orm import database
+from services import WBService
 
+wb = WBService()
 
 app = Celery('app', broker=REDIS_URL)
 app.autodiscover_tasks()
@@ -17,9 +20,10 @@ app.conf.beat_schedule = {
 
 async def start_mailing():
     mailings = await database.get_all_mailings()
-    if mailings:
-        for mailing in mailings:
-            await bot.send_message(mailing.user_id, mailing.message)
+    for mailing in mailings:
+        msg, _ = await wb.get_product(mailing.product_id)
+        await bot.send_message(mailing.user_id, msg)
+        await asyncio.sleep(0.5)
 
 
 celery_event_loop = asyncio.new_event_loop()
