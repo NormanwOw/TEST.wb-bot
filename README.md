@@ -3,8 +3,6 @@
 ![](https://img.shields.io/badge/Alembic-brown) ![](https://img.shields.io/badge/Celery-green) ![](https://img.shields.io/badge/Redis-red) ![](https://img.shields.io/badge/flower-yellow) ![](https://img.shields.io/badge/Docker-blue) 
 
 ## About
-[@nrn_test_wb_bot](https://t.me/nrn_test_wb_bot)
-___
 
 Simple bot with database and task manager. Works with Wildberries API.
 * Language **'RU'**
